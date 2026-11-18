@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WarehouseNFC.Views.ShipmentPage"
+             Title="Отгрузка"
+             BackgroundColor="{AppThemeBinding Light=#F0F4F8, Dark=#1A1A2E}">
+
+    <Grid RowDefinitions="Auto,*,Auto,Auto,Auto">
+
+        <!-- Иконка NFC — видна пока список пустой -->
+        <VerticalStackLayout Grid.Row="0"
+                             HorizontalOptions="Center"
+                             Spacing="0"
+                             Margin="0,16,0,0"
+                             IsVisible="{Binding HasShippedItems, Converter={StaticResource InvertBoolConverter}}">
+            <Image Source="nfc_icon.png"
+                   WidthRequest="300"
+                   HeightRequest="300"
+                   HorizontalOptions="Center"
+                   Aspect="AspectFit"
+                   Margin="0,-60,0,-80"/>
+            <Label Text="Поднесите смартфон к NFC-метке на упаковке товара"
+                   FontSize="15"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"
+                   Margin="32,0"/>
+            <Label Text="⚠ Убедитесь что NFC включён в настройках смартфона"
+                   FontSize="13"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   TextColor="#F57C00"
+                   Margin="32,16"/>
+        </VerticalStackLayout>
+
+        <!-- Список отсканированных товаров -->
+        <ScrollView Grid.Row="1"
+                    IsVisible="{Binding HasShippedItems}"
+                    Padding="24,8">
+            <VerticalStackLayout Spacing="8">
+                <Label Text="{Binding ShippedItems.Count, StringFormat='Товаров в списке: {0}'}"
+                       FontSize="14"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"
+                       Margin="0,8,0,4"/>
+
+                <CollectionView ItemsSource="{Binding ShippedItems}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border StrokeShape="RoundRectangle 10"
+                                    Stroke="Transparent"
+                                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                                    Margin="0,4"
+                                    Padding="12">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                                        <Label Text="{Binding ProductName}"
+                                               FontSize="14"
+                                               FontAttributes="Bold"
+                                               TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"/>
+                                        <Label Text="{Binding PositionLabel}"
+                                               FontSize="12"
+                                               TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"/>
+                                        <Label Text="{Binding SerialNumber, StringFormat='Серийный номер: {0}'}"
+                                               FontSize="12"
+                                               TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"/>
+                                    </VerticalStackLayout>
+
+                                    <Button Grid.Column="1"
+                                            Text="✕"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveItemCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="Transparent"
+                                            TextColor="#C62828"
+                                            FontSize="18"
+                                            FontAttributes="Bold"
+                                            WidthRequest="40"
+                                            HeightRequest="40"
+                                            Padding="0"
+                                            VerticalOptions="Center"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Статусная строка -->
+        <Label Grid.Row="2"
+               Text="{Binding StatusMessage}"
+               FontSize="14"
+               HorizontalOptions="Center"
+               Margin="24,4"
+               TextColor="#43A047"/>
+
+        <!-- Кнопка сканирования — всегда на месте -->
+        <Button Grid.Row="3"
+                Text="Сканировать NFC-метку"
+                Command="{Binding ScanCommand}"
+                BackgroundColor="{AppThemeBinding Light=#1976D2, Dark=#0D47A1}"
+                TextColor="White"
+                FontAttributes="Bold"
+                CornerRadius="12"
+                FontSize="18"
+                HeightRequest="56"
+                Margin="24,0,24,8"/>
+
+        <ActivityIndicator Grid.Row="3"
+                           IsRunning="{Binding IsBusy}"
+                           IsVisible="{Binding IsBusy}"
+                           Color="#1976D2"/>
+
+        <!-- Кнопка завершить — под кнопкой сканирования -->
+        <Button Grid.Row="4"
+                Text="Завершить отгрузку"
+                Command="{Binding FinishCommand}"
+                IsVisible="{Binding HasShippedItems}"
+                BackgroundColor="#43A047"
+                TextColor="White"
+                FontAttributes="Bold"
+                CornerRadius="12"
+                FontSize="18"
+                HeightRequest="56"
+                Margin="24,0,24,24"/>
+
+    </Grid>
+</ContentPage>

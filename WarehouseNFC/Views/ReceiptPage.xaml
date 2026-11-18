@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WarehouseNFC.Views.ReceiptPage"
+             Title="Приёмка"
+             BackgroundColor="{AppThemeBinding Light=#F0F4F8, Dark=#1A1A2E}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="16">
+
+            <!-- Иконка NFC — видна пока список пустой -->
+            <VerticalStackLayout VerticalOptions="Start"
+                                 HorizontalOptions="Center"
+                                 Spacing="0"
+                                 IsVisible="{Binding HasReceivedItems, Converter={StaticResource InvertBoolConverter}}">
+                <Image Source="nfc_icon.png"
+                       WidthRequest="300"
+                       HeightRequest="300"
+                       HorizontalOptions="Center"
+                       Aspect="AspectFit"
+                       Margin="0,-60,0,-80"/>
+                <Label Text="Поднесите смартфон к NFC-метке на упаковке товара"
+                       FontSize="15"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"
+                       TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"
+                       Margin="32,0"/>
+                <Label Text="⚠ Убедитесь что NFC включён в настройках смартфона"
+                       FontSize="13"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"
+                       TextColor="#F57C00"
+                       Margin="32,16"/>
+            </VerticalStackLayout>
+
+            <!-- Форма ввода -->
+            <Border StrokeShape="RoundRectangle 12"
+                    Stroke="Transparent"
+                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                    Padding="16">
+                <VerticalStackLayout Spacing="12">
+
+                    <!-- Партия — первым -->
+                    <Label Text="Номер партии"
+                           FontSize="13"
+                           TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"
+                           IsVisible="{Binding IsBatchFixed, Converter={StaticResource InvertBoolConverter}}"/>
+                    <Entry Placeholder="Например: П-2024-001"
+                           Text="{Binding Batch}"
+                           BackgroundColor="Transparent"
+                           TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"
+                           IsVisible="{Binding IsBatchFixed, Converter={StaticResource InvertBoolConverter}}"/>
+
+                    <!-- Партия фиксированная -->
+                    <Border StrokeShape="RoundRectangle 8"
+                            Stroke="Transparent"
+                            BackgroundColor="{AppThemeBinding Light=#F0F4F8, Dark=#1A1A2E}"
+                            Padding="10"
+                            IsVisible="{Binding IsBatchFixed}">
+                        <Label Text="{Binding FixedBatch, StringFormat='Партия: {0}'}"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#1976D2, Dark=#90CAF9}"/>
+                    </Border>
+
+                    <Label Text="Продукция"
+                           FontSize="13"
+                           TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"/>
+                    <Entry Placeholder="Введите название или артикул"
+                           Text="{Binding ProductSearch}"
+                           BackgroundColor="Transparent"
+                           TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"/>
+
+                    <CollectionView ItemsSource="{Binding ProductSuggestions}"
+                                   IsVisible="{Binding ShowProductSuggestions}"
+                                   SelectionMode="Single">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border StrokeShape="RoundRectangle 8"
+                                        Stroke="Transparent"
+                                        BackgroundColor="{AppThemeBinding Light=#F0F4F8, Dark=#1A1A2E}"
+                                        Margin="0,2"
+                                        Padding="10">
+                                    <Label Text="{Binding Name}"
+                                           FontSize="14"
+                                           TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectProductCommand}"
+                                                CommandParameter="{Binding .}"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Label Text="Позиция хранения"
+                           FontSize="13"
+                           TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"/>
+                    <Picker ItemsSource="{Binding Positions}"
+                            SelectedItem="{Binding SelectedPosition}"
+                            ItemDisplayBinding="{Binding DisplayName}"
+                            Title="Выберите позицию"
+                            TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"
+                            BackgroundColor="Transparent"/>
+
+                    <Label Text="Серийный номер"
+                           FontSize="13"
+                           TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"/>
+                    <Entry Placeholder="Например: СН-00001"
+                           Text="{Binding SerialNumber}"
+                           BackgroundColor="Transparent"
+                           TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"/>
+
+                    <Label Text="{Binding StatusMessage}"
+                           FontSize="13"
+                           HorizontalOptions="Center"
+                           TextColor="{Binding IsError, Converter={StaticResource BoolToColorConverter}}"/>
+
+                    <Button Text="Записать данные"
+                            Command="{Binding SaveCommand}"
+                            BackgroundColor="{AppThemeBinding Light=#1976D2, Dark=#0D47A1}"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="12"
+                            FontSize="16"
+                            HeightRequest="52"/>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Список принятых товаров -->
+            <VerticalStackLayout Spacing="8"
+                                 IsVisible="{Binding HasReceivedItems}">
+
+                <Label Text="{Binding ReceivedSummary}"
+                       FontSize="14"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"
+                       Margin="0,8,0,4"/>
+
+                <CollectionView ItemsSource="{Binding ReceivedItems}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border StrokeShape="RoundRectangle 10"
+                                    Stroke="Transparent"
+                                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                                    Margin="0,4"
+                                    Padding="12">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                                        <Label Text="{Binding ProductName}"
+                                               FontSize="14"
+                                               FontAttributes="Bold"
+                                               TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"/>
+                                        <Label Text="{Binding PositionLabel}"
+                                               FontSize="12"
+                                               TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"/>
+                                        <Label Text="{Binding SerialNumber, StringFormat='Серийный номер: {0}'}"
+                                               FontSize="12"
+                                               TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"/>
+                                    </VerticalStackLayout>
+
+                                    <Button Grid.Column="1"
+                                            Text="✕"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveItemCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="Transparent"
+                                            TextColor="#C62828"
+                                            FontSize="18"
+                                            FontAttributes="Bold"
+                                            WidthRequest="40"
+                                            HeightRequest="40"
+                                            Padding="0"
+                                            VerticalOptions="Center"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Button Text="Завершить приёмку"
+                        Command="{Binding FinishCommand}"
+                        BackgroundColor="#43A047"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="12"
+                        FontSize="18"
+                        HeightRequest="56"/>
+
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

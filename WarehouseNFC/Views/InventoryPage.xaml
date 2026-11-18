@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WarehouseNFC.Views.InventoryPage"
+             Title="Инвентаризация"
+             BackgroundColor="{AppThemeBinding Light=#F0F4F8, Dark=#1A1A2E}">
+
+    <Grid RowDefinitions="Auto,*,Auto,Auto">
+
+        <!-- Иконка NFC — видна до начала инвентаризации -->
+        <VerticalStackLayout Grid.Row="0"
+                             HorizontalOptions="Center"
+                             Spacing="0"
+                             Margin="0,16,0,0"
+                             IsVisible="{Binding IsStarted, Converter={StaticResource InvertBoolConverter}}">
+            <Image Source="nfc_icon.png"
+                   WidthRequest="300"
+                   HeightRequest="300"
+                   HorizontalOptions="Center"
+                   Aspect="AspectFit"
+                   Margin="0,-60,0,-80"/>
+            <Label Text="Последовательно обходите позиции склада и сканируйте NFC-метки на товарах"
+                   FontSize="15"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"
+                   Margin="32,0"/>
+            <Label Text="⚠ Убедитесь что NFC включён в настройках смартфона"
+                   FontSize="13"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   TextColor="#F57C00"
+                   Margin="32,16"/>
+        </VerticalStackLayout>
+
+        <!-- Текущая позиция — видна после начала -->
+        <VerticalStackLayout Grid.Row="0"
+                             Padding="24,16,24,8"
+                             Spacing="12"
+                             IsVisible="{Binding IsStarted}">
+            <Border StrokeShape="RoundRectangle 12"
+                    Stroke="Transparent"
+                    BackgroundColor="{AppThemeBinding Light=#1976D2, Dark=#0D47A1}"
+                    Padding="16">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Текущая позиция"
+                           FontSize="13"
+                           TextColor="#BBDEFB"
+                           HorizontalOptions="Center"/>
+                    <Label Text="{Binding CurrentPositionLabel}"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
+                    <Label Text="{Binding StatusMessage}"
+                           FontSize="13"
+                           TextColor="#BBDEFB"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"
+                           LineBreakMode="WordWrap"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               Color="#1976D2"/>
+        </VerticalStackLayout>
+
+        <!-- Список отсканированных -->
+        <ScrollView Grid.Row="1"
+                    IsVisible="{Binding IsStarted}"
+                    Padding="24,0">
+            <VerticalStackLayout Spacing="4">
+                <CollectionView ItemsSource="{Binding ScannedItems}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border StrokeShape="RoundRectangle 8"
+                                    Stroke="Transparent"
+                                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                                    Margin="0,4">
+                                <Grid ColumnDefinitions="38,*"
+                                      Padding="12,10"
+                                      ColumnSpacing="10">
+                                    <Border Grid.Column="0"
+                                            StrokeShape="RoundRectangle 14"
+                                            Stroke="Transparent"
+                                            BackgroundColor="{Binding IconColor}"
+                                            WidthRequest="28"
+                                            HeightRequest="28"
+                                            VerticalOptions="Center">
+                                        <Label Text="{Binding Icon}"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               TextColor="White"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"/>
+                                    </Border>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding DisplayText}"
+                                           FontSize="14"
+                                           TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"
+                                           LineBreakMode="WordWrap"
+                                           VerticalOptions="Center"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Итоговые результаты -->
+                <CollectionView ItemsSource="{Binding FinalResults}"
+                                IsVisible="{Binding IsFinished}"
+                                Margin="0,8">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border StrokeShape="RoundRectangle 8"
+                                    Stroke="Transparent"
+                                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                                    Margin="0,4">
+                                <Grid ColumnDefinitions="38,*"
+                                      Padding="12,10"
+                                      ColumnSpacing="10">
+                                    <Label Grid.Column="0"
+                                           Text="{Binding ResultIcon}"
+                                           FontSize="18"
+                                           TextColor="{Binding ResultColor}"
+                                           VerticalOptions="Start"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding DisplayText}"
+                                           FontSize="14"
+                                           TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"
+                                           LineBreakMode="WordWrap"
+                                           VerticalOptions="Center"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Кнопка сканировать -->
+        <Button Grid.Row="2"
+                Text="Сканировать NFC-метку"
+                Command="{Binding ScanCommand}"
+                BackgroundColor="{AppThemeBinding Light=#1976D2, Dark=#0D47A1}"
+                TextColor="White"
+                FontAttributes="Bold"
+                CornerRadius="12"
+                FontSize="18"
+                HeightRequest="56"
+                Margin="24,0,24,8"
+                IsVisible="{Binding IsStarted}"/>
+
+        <!-- Кнопка начать / далее -->
+        <Button Grid.Row="3"
+                Text="Начать инвентаризацию"
+                Command="{Binding StartCommand}"
+                BackgroundColor="{AppThemeBinding Light=#1976D2, Dark=#0D47A1}"
+                TextColor="White"
+                FontAttributes="Bold"
+                CornerRadius="12"
+                FontSize="18"
+                HeightRequest="56"
+                Margin="24,0,24,24"
+                IsVisible="{Binding IsStarted, Converter={StaticResource InvertBoolConverter}}"/>
+
+        <Button Grid.Row="3"
+                Text="Далее →"
+                Command="{Binding NextCommand}"
+                BackgroundColor="#43A047"
+                TextColor="White"
+                FontAttributes="Bold"
+                CornerRadius="12"
+                FontSize="18"
+                HeightRequest="56"
+                Margin="24,0,24,24"
+                IsVisible="{Binding IsStarted}"/>
+
+    </Grid>
+</ContentPage>

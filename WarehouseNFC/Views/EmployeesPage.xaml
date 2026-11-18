@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WarehouseNFC.Views.EmployeesPage"
+             Title="Сотрудники"
+             BackgroundColor="{AppThemeBinding Light=#F0F4F8, Dark=#1A1A2E}">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <VerticalStackLayout Grid.Row="0" Padding="24,16,24,8" Spacing="12">
+
+            <!-- Поиск -->
+            <Border StrokeShape="RoundRectangle 12"
+                    Stroke="Transparent"
+                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                    IsVisible="{Binding IsNormal}">
+                <Entry Placeholder="🔍 Поиск по ФИО, логину или роли"
+                       Text="{Binding SearchText}"
+                       Margin="12,8"
+                       FontSize="16"/>
+            </Border>
+
+            <!-- Форма добавления -->
+            <Label Text="ФИО"
+                   FontSize="13"
+                   TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"
+                   IsVisible="{Binding IsAdding}"/>
+            <Border StrokeShape="RoundRectangle 12"
+                    Stroke="Transparent"
+                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                    IsVisible="{Binding IsAdding}">
+                <Entry Placeholder="ФИО"
+                       Text="{Binding FullName}"
+                       Margin="12,8"
+                       FontSize="16"/>
+            </Border>
+
+            <Label Text="Логин"
+                   FontSize="13"
+                   TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"
+                   IsVisible="{Binding IsAdding}"/>
+            <Border StrokeShape="RoundRectangle 12"
+                    Stroke="Transparent"
+                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                    IsVisible="{Binding IsAdding}">
+                <Entry Placeholder="Логин"
+                       Text="{Binding Login}"
+                       Margin="12,8"
+                       FontSize="16"/>
+            </Border>
+
+            <Label Text="Пароль"
+                   FontSize="13"
+                   TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"
+                   IsVisible="{Binding IsAdding}"/>
+            <Border StrokeShape="RoundRectangle 12"
+                    Stroke="Transparent"
+                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                    IsVisible="{Binding IsAdding}">
+                <Entry Placeholder="Пароль"
+                       Text="{Binding Password}"
+                       IsPassword="True"
+                       Margin="12,8"
+                       FontSize="16"/>
+            </Border>
+
+            <Label Text="Роль"
+                   FontSize="13"
+                   TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"
+                   IsVisible="{Binding IsAdding}"/>
+            <Border StrokeShape="RoundRectangle 12"
+                    Stroke="Transparent"
+                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                    IsVisible="{Binding IsAdding}">
+                <Picker ItemsSource="{Binding Roles}"
+                        ItemDisplayBinding="{Binding RoleName}"
+                        SelectedItem="{Binding SelectedRole}"
+                        Margin="12,4"
+                        FontSize="16"/>
+            </Border>
+
+            <Button Text="Сохранить"
+                    Command="{Binding AddCommand}"
+                    BackgroundColor="#43A047"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="12"
+                    FontSize="18"
+                    HeightRequest="56"
+                    IsVisible="{Binding IsAdding}"/>
+
+            <Button Text="Отмена"
+                    Command="{Binding ToggleAddCommand}"
+                    BackgroundColor="#C62828"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="12"
+                    FontSize="18"
+                    HeightRequest="56"
+                    IsVisible="{Binding IsAdding}"/>
+
+            <!-- Форма редактирования -->
+            <Label Text="ФИО"
+                   FontSize="13"
+                   TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"
+                   IsVisible="{Binding IsEditing}"/>
+            <Border StrokeShape="RoundRectangle 12"
+                    Stroke="Transparent"
+                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                    IsVisible="{Binding IsEditing}">
+                <Entry Placeholder="ФИО"
+                       Text="{Binding EditFullName}"
+                       Margin="12,8"
+                       FontSize="16"/>
+            </Border>
+
+            <Label Text="Логин"
+                   FontSize="13"
+                   TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"
+                   IsVisible="{Binding IsEditing}"/>
+            <Border StrokeShape="RoundRectangle 12"
+                    Stroke="Transparent"
+                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                    IsVisible="{Binding IsEditing}">
+                <Entry Placeholder="Логин"
+                       Text="{Binding EditLogin}"
+                       Margin="12,8"
+                       FontSize="16"/>
+            </Border>
+
+            <Label Text="Роль"
+                   FontSize="13"
+                   TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"
+                   IsVisible="{Binding IsEditing}"/>
+            <Border StrokeShape="RoundRectangle 12"
+                    Stroke="Transparent"
+                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                    IsVisible="{Binding IsEditing}">
+                <Picker ItemsSource="{Binding Roles}"
+                        ItemDisplayBinding="{Binding RoleName}"
+                        SelectedItem="{Binding EditSelectedRole}"
+                        Margin="12,4"
+                        FontSize="16"/>
+            </Border>
+
+            <Button Text="Сохранить изменения"
+                    Command="{Binding SaveEditCommand}"
+                    BackgroundColor="#43A047"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="12"
+                    FontSize="18"
+                    HeightRequest="56"
+                    IsVisible="{Binding IsEditing}"/>
+
+            <Button Text="Удалить сотрудника"
+                    Command="{Binding DeleteCommand}"
+                    CommandParameter="{Binding EditingEmployee}"
+                    BackgroundColor="#C62828"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="12"
+                    FontSize="18"
+                    HeightRequest="56"
+                    IsVisible="{Binding IsEditing}"/>
+
+            <Button Text="Отмена"
+                    Command="{Binding CancelEditCommand}"
+                    BackgroundColor="{AppThemeBinding Light=#757575, Dark=#555555}"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="12"
+                    FontSize="18"
+                    HeightRequest="56"
+                    IsVisible="{Binding IsEditing}"/>
+
+            <!-- Статус -->
+            <Label Text="{Binding StatusMessage}"
+                   FontSize="14"
+                   HorizontalOptions="Center"
+                   TextColor="{Binding IsError, Converter={StaticResource BoolToColorConverter}}"/>
+
+            <!-- Кнопка добавить -->
+            <Button Text="Добавить сотрудника"
+                    Command="{Binding ToggleAddCommand}"
+                    BackgroundColor="{AppThemeBinding Light=#1976D2, Dark=#0D47A1}"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="12"
+                    FontSize="18"
+                    HeightRequest="56"
+                    IsVisible="{Binding IsNormal}"/>
+
+        </VerticalStackLayout>
+
+        <!-- Список сотрудников -->
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Employees}"
+                        Margin="24,0,24,24"
+                        IsVisible="{Binding IsNormal}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border StrokeShape="RoundRectangle 8"
+                            Stroke="{Binding IsCurrentEmployee, Converter={StaticResource BoolToColorConverter}, ConverterParameter=highlight}"
+                            StrokeThickness="2"
+                            BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                            Margin="0,4">
+                        <Grid ColumnDefinitions="*,Auto" Padding="12">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="{Binding FullName}"
+                                       FontSize="15"
+                                       FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"/>
+                                <Label Text="{Binding Login, StringFormat='Логин: {0}'}"
+                                       FontSize="13"
+                                       TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"/>
+                                <Label Text="{Binding RoleName, StringFormat='Роль: {0}'}"
+                                       FontSize="13"
+                                       TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"/>
+                            </VerticalStackLayout>
+
+                            <Button Grid.Column="1"
+                                    Text="⋮"
+                                    FontSize="22"
+                                    BackgroundColor="Transparent"
+                                    TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"
+                                    WidthRequest="44"
+                                    HeightRequest="44"
+                                    Padding="0"
+                                    VerticalOptions="Center"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditCommand}"
+                                    CommandParameter="{Binding .}"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </Grid>
+</ContentPage>

@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="WarehouseNFC.Data/WarehouseNFC.Data.csproj" />
+  <Project Path="WarehouseNFC/WarehouseNFC.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
+</Solution>

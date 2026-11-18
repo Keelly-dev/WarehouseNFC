@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WarehouseNFC.Views.HistoryPage"
+             Title="История операций"
+             BackgroundColor="{AppThemeBinding Light=#F0F4F8, Dark=#1A1A2E}">
+
+    <Grid>
+
+        <!-- Список операций -->
+        <ScrollView IsVisible="{Binding HasSelection, Converter={StaticResource InvertBoolConverter}}">
+            <VerticalStackLayout Padding="24" Spacing="8">
+                <CollectionView ItemsSource="{Binding Operations}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border StrokeShape="RoundRectangle 10"
+                                    Stroke="Transparent"
+                                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                                    Margin="0,4"
+                                    Padding="14">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                                        <Label Text="{Binding Type}"
+                                               FontSize="15"
+                                               FontAttributes="Bold"
+                                               TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"/>
+                                        <Label Text="{Binding Description}"
+                                               FontSize="13"
+                                               LineBreakMode="TailTruncation"
+                                               TextColor="{AppThemeBinding Light=#424242, Dark=#CCCCCC}"/>
+                                        <Label Text="{Binding Employee}"
+                                               FontSize="12"
+                                               TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"/>
+                                    </VerticalStackLayout>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding DateTime, StringFormat='{0:dd.MM.yyyy HH:mm}'}"
+                                           FontSize="12"
+                                           VerticalOptions="Start"
+                                           TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"/>
+                                </Grid>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                </Border.GestureRecognizers>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout VerticalOptions="Center"
+                                             HorizontalOptions="Center"
+                                             Spacing="8"
+                                             Margin="0,60,0,0">
+                            <Label Text="📋"
+                                   FontSize="48"
+                                   HorizontalOptions="Center"/>
+                            <Label Text="Операций за сессию не было"
+                                   FontSize="15"
+                                   HorizontalOptions="Center"
+                                   TextColor="{AppThemeBinding Light=#BDBDBD, Dark=#555555}"/>
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Детали операции -->
+        <ScrollView IsVisible="{Binding HasSelection}">
+            <VerticalStackLayout Padding="24" Spacing="16">
+
+                <!-- Приёмка и отгрузка — список товаров -->
+                <VerticalStackLayout Spacing="8"
+                                     IsVisible="{Binding HasItems}">
+
+                    <Label Text="{Binding ItemsHeader}"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"/>
+
+                    <!-- Товары приёмки -->
+                    <CollectionView ItemsSource="{Binding SelectedOperation.Items}"
+                                   IsVisible="{Binding IsReceiptOperation}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border StrokeShape="RoundRectangle 8"
+                                        Stroke="Transparent"
+                                        BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                                        Margin="0,4"
+                                        Padding="12">
+                                    <VerticalStackLayout Spacing="3">
+                                        <Label Text="{Binding ProductName}"
+                                               FontSize="14"
+                                               FontAttributes="Bold"
+                                               TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"/>
+                                        <Label Text="{Binding PositionLabel}"
+                                               FontSize="12"
+                                               TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"/>
+                                        <Label Text="{Binding SerialNumber, StringFormat='Серийный номер: {0}'}"
+                                               FontSize="12"
+                                               TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"/>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <!-- Товары отгрузки -->
+                    <CollectionView ItemsSource="{Binding SelectedOperation.Items}"
+                                   IsVisible="{Binding IsShipmentOperation}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border StrokeShape="RoundRectangle 8"
+                                        Stroke="Transparent"
+                                        BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                                        Margin="0,4"
+                                        Padding="12">
+                                    <VerticalStackLayout Spacing="3">
+                                        <Label Text="{Binding ProductName}"
+                                               FontSize="14"
+                                               FontAttributes="Bold"
+                                               TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"/>
+                                        <Label Text="{Binding PositionLabel}"
+                                               FontSize="12"
+                                               TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"/>
+                                        <Label Text="{Binding Batch, StringFormat='Партия: {0}'}"
+                                               FontSize="12"
+                                               TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"/>
+                                        <Label Text="{Binding SerialNumber, StringFormat='Серийный номер: {0}'}"
+                                               FontSize="12"
+                                               TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"/>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                </VerticalStackLayout>
+
+                <!-- Инвентаризация — сворачиваемый список -->
+                <VerticalStackLayout Spacing="8"
+                                     IsVisible="{Binding HasInventoryResults}">
+
+                    <Border StrokeShape="RoundRectangle 12"
+                            Stroke="Transparent"
+                            BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                            Padding="16">
+                        <VerticalStackLayout Spacing="8">
+
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Grid.Column="0"
+                                       Text="{Binding ItemsHeader}"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"
+                                       VerticalOptions="Center"
+                                       LineBreakMode="WordWrap"/>
+                                <Label Grid.Column="1"
+                                       Text="{Binding InventoryArrow}"
+                                       FontSize="16"
+                                       TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"
+                                       VerticalOptions="Center">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ToggleInventoryCommand}"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ToggleInventoryCommand}"/>
+                                </Grid.GestureRecognizers>
+                            </Grid>
+
+                            <CollectionView ItemsSource="{Binding SelectedOperation.InventoryResults}"
+                                           IsVisible="{Binding IsInventoryExpanded}">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border StrokeShape="RoundRectangle 8"
+                                                Stroke="Transparent"
+                                                BackgroundColor="{AppThemeBinding Light=#F0F4F8, Dark=#1A1A2E}"
+                                                Margin="0,4"
+                                                Padding="12">
+                                            <Label Text="{Binding .}"
+                                                   FontSize="14"
+                                                   LineBreakMode="WordWrap"
+                                                   TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+
+                        </VerticalStackLayout>
+                    </Border>
+
+                </VerticalStackLayout>
+
+                <Button Text="← Назад к списку"
+                        Command="{Binding CloseDetailCommand}"
+                        BackgroundColor="{AppThemeBinding Light=#1976D2, Dark=#0D47A1}"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="12"
+                        FontSize="16"
+                        HeightRequest="52"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

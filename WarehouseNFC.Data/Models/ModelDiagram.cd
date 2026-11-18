@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="WarehouseNFC.Data.Models.Employee">
+    <Position X="1.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAICAAAAAIAAEAAAAAAAAAAAAAAAAAAQAAACAAA=</HashCode>
+      <FileName>Models\Employee.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WarehouseNFC.Data.Models.NfcTag">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAggAAAAAAEAACAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Models\NfcTag.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WarehouseNFC.Data.Models.Operation">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAgAAAgAAAAAACAAAAAQAAABAAAACAAA=</HashCode>
+      <FileName>Models\Operation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WarehouseNFC.Data.Models.OperationItem">
+    <Position X="7" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAIAAAAAAAAAAAAgAAAAAQEAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Models\OperationItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WarehouseNFC.Data.Models.OperationType">
+    <Position X="3.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAgAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\OperationType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WarehouseNFC.Data.Models.Product">
+    <Position X="3.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAACAAAAAAAAAAAAIAAAAAQAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Product.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WarehouseNFC.Data.Models.ProductItem">
+    <Position X="1.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EQACAAAEAAAAgAAgggQAAAAAAAGAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ProductItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WarehouseNFC.Data.Models.Role">
+    <Position X="3.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAACAAAAAAAAAAAEAAAAAA=</HashCode>
+      <FileName>Models\Role.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WarehouseNFC.Data.Models.StoragePosition">
+    <Position X="5.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEABAAAAAAAAQAAQAAAQAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\StoragePosition.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

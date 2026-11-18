@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WarehouseNFC.Views.LoginPage"
+             Title="Авторизация"
+             BackgroundColor="{AppThemeBinding Light=#F0F4F8, Dark=#1A1A2E}">
+
+    <VerticalStackLayout Padding="40" Spacing="16" VerticalOptions="Center">
+
+        <Label Text="Система учёта склада"
+               FontSize="24"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"/>
+
+        <Label Text="Введите учётные данные"
+               FontSize="14"
+               HorizontalOptions="Center"
+               TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"/>
+
+        <Border StrokeShape="RoundRectangle 12"
+                Stroke="Transparent"
+                BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}">
+            <Entry Placeholder="IP-адрес сервера"
+                   Text="{Binding ServerIp}"
+                   Margin="12,8"
+                   FontSize="16"
+                   Keyboard="Url"/>
+        </Border>
+
+        <Border StrokeShape="RoundRectangle 12"
+                Stroke="Transparent"
+                BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}">
+            <Entry Placeholder="Логин"
+                   Text="{Binding Login}"
+                   Margin="12,8"
+                   FontSize="16"/>
+        </Border>
+
+        <Border StrokeShape="RoundRectangle 12"
+                Stroke="Transparent"
+                BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}">
+            <Entry Placeholder="Пароль"
+                   Text="{Binding Password}"
+                   IsPassword="True"
+                   Margin="12,8"
+                   FontSize="16"/>
+        </Border>
+
+        <Label Text="{Binding ErrorMessage}"
+               TextColor="#C62828"
+               FontSize="13"
+               HorizontalOptions="Center"/>
+
+        <Button Text="Войти"
+                Command="{Binding LoginCommand}"
+                BackgroundColor="{AppThemeBinding Light=#1976D2, Dark=#0D47A1}"
+                TextColor="White"
+                FontAttributes="Bold"
+                CornerRadius="12"
+                FontSize="18"
+                HeightRequest="56"/>
+
+        <ActivityIndicator IsRunning="{Binding IsBusy}"
+                           IsVisible="{Binding IsBusy}"
+                           Color="#1976D2"/>
+
+    </VerticalStackLayout>
+</ContentPage>

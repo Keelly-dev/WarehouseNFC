@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WarehouseNFC.Views.ShipmentResultPage"
+             Title="Отгрузка"
+             BackgroundColor="{AppThemeBinding Light=#F0F4F8, Dark=#1A1A2E}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="16">
+
+            <Label Text="Отгрузка завершена"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   TextColor="#43A047"/>
+
+            <Border StrokeShape="RoundRectangle 12"
+                    Stroke="Transparent"
+                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                    Padding="16">
+                <VerticalStackLayout Spacing="8">
+
+                    <Label Text="{Binding ShippedItems.Count, StringFormat='Отгружено товаров: {0}'}"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"/>
+
+                    <CollectionView ItemsSource="{Binding ShippedItems}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border StrokeShape="RoundRectangle 8"
+                                        Stroke="Transparent"
+                                        BackgroundColor="{AppThemeBinding Light=#F0F4F8, Dark=#1A1A2E}"
+                                        Margin="0,4"
+                                        Padding="12">
+                                    <VerticalStackLayout Spacing="4">
+                                        <Label Text="{Binding ProductName}"
+                                               FontSize="15"
+                                               FontAttributes="Bold"
+                                               TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"/>
+                                        <Label Text="{Binding Batch, StringFormat='Партия: {0}'}"
+                                               FontSize="13"
+                                               TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"/>
+                                        <Label Text="{Binding SerialNumber, StringFormat='Серийный номер: {0}'}"
+                                               FontSize="13"
+                                               TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"/>
+                                        <Label Text="{Binding PositionLabel, StringFormat='Позиция: {0}'}"
+                                               FontSize="13"
+                                               TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"/>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                        <CollectionView.EmptyView>
+                            <Label Text="Нет отгруженных товаров"
+                                   FontSize="13"
+                                   TextColor="{AppThemeBinding Light=#BDBDBD, Dark=#555555}"/>
+                        </CollectionView.EmptyView>
+                    </CollectionView>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="Отгрузить ещё"
+                    Command="{Binding ShipMoreCommand}"
+                    BackgroundColor="{AppThemeBinding Light=#1976D2, Dark=#0D47A1}"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="12"
+                    FontSize="18"
+                    HeightRequest="56"/>
+
+            <Button Text="На главную"
+                    Command="{Binding GoHomeCommand}"
+                    BackgroundColor="#43A047"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="12"
+                    FontSize="18"
+                    HeightRequest="56"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

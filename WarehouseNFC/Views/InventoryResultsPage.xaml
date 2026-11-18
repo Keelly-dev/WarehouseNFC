@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WarehouseNFC.Views.InventoryResultsPage"
+             Title="Инвентаризация"
+             BackgroundColor="{AppThemeBinding Light=#F0F4F8, Dark=#1A1A2E}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="12">
+
+            <Label Text="Результаты инвентаризации"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"/>
+
+            <!-- На месте -->
+            <Border StrokeShape="RoundRectangle 12"
+                    Stroke="Transparent"
+                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                    Padding="16">
+                <VerticalStackLayout Spacing="8">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0"
+                               Text="{Binding OkSummary}"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#43A047"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="1"
+                               Text="{Binding OkArrow}"
+                               FontSize="16"
+                               TextColor="#43A047"
+                               VerticalOptions="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ToggleOkCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ToggleOkCommand}"/>
+                        </Grid.GestureRecognizers>
+                    </Grid>
+
+                    <CollectionView ItemsSource="{Binding OkItems}"
+                                   IsVisible="{Binding IsOkExpanded}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Label Text="{Binding .}"
+                                       FontSize="14"
+                                       Padding="0,4"
+                                       LineBreakMode="WordWrap"
+                                       TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"/>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                        <CollectionView.EmptyView>
+                            <Label Text="Нет товаров"
+                                   FontSize="13"
+                                   TextColor="{AppThemeBinding Light=#BDBDBD, Dark=#555555}"/>
+                        </CollectionView.EmptyView>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Не на своей позиции -->
+            <Border StrokeShape="RoundRectangle 12"
+                    Stroke="Transparent"
+                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                    Padding="16">
+                <VerticalStackLayout Spacing="8">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0"
+                               Text="{Binding MisplacedSummary}"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#F57C00"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="1"
+                               Text="{Binding MisplacedArrow}"
+                               FontSize="16"
+                               TextColor="#F57C00"
+                               VerticalOptions="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ToggleMisplacedCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ToggleMisplacedCommand}"/>
+                        </Grid.GestureRecognizers>
+                    </Grid>
+
+                    <CollectionView ItemsSource="{Binding MisplacedItems}"
+                                   IsVisible="{Binding IsMisplacedExpanded}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,Auto,Auto" Padding="0,4">
+                                    <Label Grid.Column="0"
+                                           Text="{Binding DisplayText}"
+                                           FontSize="14"
+                                           LineBreakMode="WordWrap"
+                                           VerticalOptions="Center"
+                                           TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"/>
+                                    <Button Grid.Column="1"
+                                            Text="✓"
+                                            Command="{Binding AcceptCommand}"
+                                            BackgroundColor="#43A047"
+                                            TextColor="White"
+                                            CornerRadius="20"
+                                            FontSize="20"
+                                            FontAttributes="Bold"
+                                            WidthRequest="48"
+                                            HeightRequest="48"
+                                            Margin="4,0"/>
+                                    <Button Grid.Column="2"
+                                            Text="✗"
+                                            Command="{Binding IgnoreCommand}"
+                                            BackgroundColor="#C62828"
+                                            TextColor="White"
+                                            CornerRadius="20"
+                                            FontSize="16"
+                                            WidthRequest="48"
+                                            HeightRequest="48"
+                                            Margin="4,0"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                        <CollectionView.EmptyView>
+                            <Label Text="Расхождений нет"
+                                   FontSize="13"
+                                   TextColor="{AppThemeBinding Light=#BDBDBD, Dark=#555555}"/>
+                        </CollectionView.EmptyView>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Не найдено -->
+            <Border StrokeShape="RoundRectangle 12"
+                    Stroke="Transparent"
+                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                    Padding="16">
+                <VerticalStackLayout Spacing="8">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0"
+                               Text="{Binding MissingSummary}"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#C62828"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="1"
+                               Text="{Binding MissingArrow}"
+                               FontSize="16"
+                               TextColor="#C62828"
+                               VerticalOptions="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ToggleMissingCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ToggleMissingCommand}"/>
+                        </Grid.GestureRecognizers>
+                    </Grid>
+
+                    <CollectionView ItemsSource="{Binding MissingItems}"
+                                   IsVisible="{Binding IsMissingExpanded}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Label Text="{Binding .}"
+                                       FontSize="14"
+                                       Padding="0,4"
+                                       LineBreakMode="WordWrap"
+                                       TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"/>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                        <CollectionView.EmptyView>
+                            <Label Text="Все товары найдены"
+                                   FontSize="13"
+                                   TextColor="{AppThemeBinding Light=#BDBDBD, Dark=#555555}"/>
+                        </CollectionView.EmptyView>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Неизвестные объекты -->
+            <Border StrokeShape="RoundRectangle 12"
+                    Stroke="Transparent"
+                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
+                    Padding="16">
+                <VerticalStackLayout Spacing="8">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0"
+                               Text="{Binding UnknownSummary}"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="1"
+                               Text="{Binding UnknownArrow}"
+                               FontSize="16"
+                               TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"
+                               VerticalOptions="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ToggleUnknownCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ToggleUnknownCommand}"/>
+                        </Grid.GestureRecognizers>
+                    </Grid>
+
+                    <CollectionView ItemsSource="{Binding UnknownItems}"
+                                   IsVisible="{Binding IsUnknownExpanded}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,Auto,Auto" Padding="0,4">
+                                    <Label Grid.Column="0"
+                                           Text="{Binding DisplayText}"
+                                           FontSize="14"
+                                           LineBreakMode="WordWrap"
+                                           VerticalOptions="Center"
+                                           TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"/>
+                                    <Button Grid.Column="1"
+                                            Text="+"
+                                            Command="{Binding AcceptCommand}"
+                                            BackgroundColor="{AppThemeBinding Light=#1976D2, Dark=#0D47A1}"
+                                            TextColor="White"
+                                            CornerRadius="20"
+                                            FontSize="20"
+                                            FontAttributes="Bold"
+                                            WidthRequest="48"
+                                            HeightRequest="48"
+                                            Margin="4,0"/>
+                                    <Button Grid.Column="2"
+                                            Text="✗"
+                                            Command="{Binding IgnoreCommand}"
+                                            BackgroundColor="#C62828"
+                                            TextColor="White"
+                                            CornerRadius="20"
+                                            FontSize="16"
+                                            WidthRequest="48"
+                                            HeightRequest="48"
+                                            Margin="4,0"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                        <CollectionView.EmptyView>
+                            <Label Text="Неизвестных объектов нет"
+                                   FontSize="13"
+                                   TextColor="{AppThemeBinding Light=#BDBDBD, Dark=#555555}"/>
+                        </CollectionView.EmptyView>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="Закрыть"
+                    Command="{Binding CloseCommand}"
+                    BackgroundColor="{AppThemeBinding Light=#1976D2, Dark=#0D47A1}"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="12"
+                    FontSize="18"
+                    HeightRequest="56"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

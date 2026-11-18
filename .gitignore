@@ -1,0 +1,15 @@
+.vs/
+bin/
+obj/
+*.user
+*.suo
+.env
+.env.*
+*.db
+*.sqlite*
+*.pfx
+*.p12
+*.jks
+*.keystore
+*.apk
+*.aab

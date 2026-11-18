@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WarehouseNFC.Views.MainPage"
+             Title="Главная"
+             BackgroundColor="{AppThemeBinding Light=#F0F4F8, Dark=#1A1A2E}">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="*,Auto">
+            <Label Text="Главная"
+                   Grid.Column="0"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"
+                   VerticalOptions="Center"
+                   Padding="0,0,0,0"/>
+            <VerticalStackLayout Grid.Column="1"
+                                 HorizontalOptions="End"
+                                 VerticalOptions="Center"
+                                 Padding="0,0,16,0"
+                                 Spacing="1">
+                <Label Text="{Binding FullName}"
+                       FontSize="13"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=#212121, Dark=#FFFFFF}"
+                       HorizontalOptions="End"
+                       LineBreakMode="TailTruncation"
+                       MaximumWidthRequest="160"/>
+                <Label Text="{Binding RoleName}"
+                       FontSize="13"
+                       TextColor="{AppThemeBinding Light=#757575, Dark=#AAAAAA}"
+                       HorizontalOptions="End"/>
+            </VerticalStackLayout>
+        </Grid>
+    </Shell.TitleView>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24,8,24,24" Spacing="12">
+
+            <Button Text="📥  Приёмка"
+                    Command="{Binding ReceiptCommand}"
+                    BackgroundColor="{AppThemeBinding Light=#1976D2, Dark=#0D47A1}"
+                    TextColor="White"
+                    CornerRadius="12"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HeightRequest="56"
+                    IsVisible="{Binding CanReceive}"/>
+
+            <Button Text="📤  Отгрузка"
+                    Command="{Binding ShipmentCommand}"
+                    BackgroundColor="{AppThemeBinding Light=#1976D2, Dark=#0D47A1}"
+                    TextColor="White"
+                    CornerRadius="12"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HeightRequest="56"
+                    IsVisible="{Binding CanShip}"/>
+
+            <Button Text="📋  Инвентаризация"
+                    Command="{Binding InventoryCommand}"
+                    BackgroundColor="{AppThemeBinding Light=#1976D2, Dark=#0D47A1}"
+                    TextColor="White"
+                    CornerRadius="12"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HeightRequest="56"
+                    IsVisible="{Binding CanInventory}"/>
+
+            <Button Text="📦  Номенклатура"
+                    Command="{Binding ProductsCommand}"
+                    BackgroundColor="{AppThemeBinding Light=#1976D2, Dark=#0D47A1}"
+                    TextColor="White"
+                    CornerRadius="12"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HeightRequest="56"
+                    IsVisible="{Binding CanManageProducts}"/>
+
+            <Button Text="👥  Сотрудники"
+                    Command="{Binding EmployeesCommand}"
+                    BackgroundColor="{AppThemeBinding Light=#1976D2, Dark=#0D47A1}"
+                    TextColor="White"
+                    CornerRadius="12"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HeightRequest="56"
+                    IsVisible="{Binding CanManageEmployees}"/>
+
+            <Button Text="🕐  История операций"
+                    Command="{Binding HistoryCommand}"
+                    BackgroundColor="{AppThemeBinding Light=#455A64, Dark=#37474F}"
+                    TextColor="White"
+                    CornerRadius="12"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HeightRequest="56"
+                    IsVisible="{Binding CanViewHistory}"/>
+
+            <Button Text="🚪  Выйти"
+                    Command="{Binding LogoutCommand}"
+                    BackgroundColor="#C62828"
+                    TextColor="White"
+                    CornerRadius="12"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HeightRequest="56"
+                    Margin="0,8,0,0"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
